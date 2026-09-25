@@ -4,6 +4,8 @@
 
 # Godot-specific ignores
 .import/
+.exe/
+export_presets.cfg
 export.cfg
 export_credentials.cfg
 

@@ -111,6 +111,12 @@ var light_color : Color:
 		%DirectionalLight3D.light_color = value
 	get():
 		return %DirectionalLight3D.light_color
+var ambient_color : Color:
+	set(value):
+		%WorldEnvironment.environment.ambient_light_color = value
+		%PreviewWorldEnvironment.environment.ambient_light_color = value
+	get():
+		return %WorldEnvironment.environment.ambient_light_color
 
 func _ready() -> void:
 	config_file = ConfigFile.new()
@@ -133,8 +139,7 @@ func _on_zoom_slider_value_changed(value: float) -> void:
 	%ZoomLevel.text = str(value)
 
 func _on_ambient_color_picker_button_color_changed(color: Color) -> void:
-	%WorldEnvironment.environment.ambient_light_color = color
-	%PreviewWorldEnvironment.environment.ambient_light_color = color
+	ambient_color = color
 
 func _on_light_h_slider_value_changed(value: float) -> void:
 	light_rotation_y = value
@@ -336,12 +341,15 @@ func _load_values() -> void:
 	if config_file.get_value("Shader", "specular_hack") != null:
 		%SpecHackCheckBox.button_pressed = config_file.get_value("Shader", "specular_hack")
 		specular_hack = %SpecHackCheckBox.button_pressed
+	if config_file.get_value("Lighting", "ambient_color") != null:
+		ambient_color = config_file.get_value("Lighting", "ambient_color")
 	
 func _save_values() -> void:
 	config_file.set_value("Lighting", "light_rotation_x", light_rotation_x)
 	config_file.set_value("Lighting", "light_rotation_y", light_rotation_y)
 	config_file.set_value("Lighting", "light_specular", light_specular)
 	config_file.set_value("Lighting", "light_color", light_color)
+	config_file.set_value("Lighting", "ambient_color", ambient_color)
 	
 	var shader_type : String = ""
 	if shader == blinn_shader:
